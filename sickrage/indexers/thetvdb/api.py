@@ -22,7 +22,6 @@ import functools
 import json
 import re
 import time
-import urlparse
 from base64 import urlsafe_b64decode
 from collections import OrderedDict
 from datetime import datetime
@@ -31,6 +30,7 @@ from operator import itemgetter
 from requests import RequestException
 from simplejson import JSONDecodeError
 from six import text_type
+from six.moves.urllib.parse import urlparse
 
 import sickrage
 from sickrage.core.websession import WebSession

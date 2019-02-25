@@ -2,10 +2,10 @@ from __future__ import unicode_literals
 
 import json
 import time
-from urlparse import urljoin
 
 from oauthlib.oauth2 import MissingTokenError, InvalidClientIdError, TokenExpiredError, InvalidGrantError
 from requests_oauthlib import OAuth2Session
+from six.moves.urllib.parse import urljoin
 
 import sickrage
 from sickrage.core.api.exceptions import unauthorized, error

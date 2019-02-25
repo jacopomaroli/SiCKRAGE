@@ -28,8 +28,6 @@ import sys
 import threading
 import time
 import traceback
-import urllib
-import urlparse
 import uuid
 
 from apscheduler.schedulers.tornado import TornadoScheduler
@@ -37,6 +35,8 @@ from apscheduler.triggers.interval import IntervalTrigger
 from dateutil import tz
 from fake_useragent import UserAgent
 from keycloak.realm import KeycloakRealm
+from six.moves import urllib
+from six.moves.urllib.parse import urlparse
 from tornado.ioloop import IOLoop
 
 import sickrage

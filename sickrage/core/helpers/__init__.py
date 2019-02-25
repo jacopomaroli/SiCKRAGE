@@ -35,7 +35,6 @@ import sys
 import tempfile
 import time
 import traceback
-import urlparse
 import uuid
 import webbrowser
 import zipfile
@@ -46,6 +45,7 @@ import rarfile
 import requests
 import six
 from bs4 import BeautifulSoup
+from six.moves.urllib.parse import urlparse
 
 import sickrage
 from sickrage.core.common import Quality, SKIPPED, WANTED, FAILED, UNAIRED
@@ -863,7 +863,7 @@ def anon_url(*url):
     url = ''.join(map(unicode, url))
 
     # Handle URL's containing https or http, previously only handled http
-    uri_pattern = ur'^https?://'
+    uri_pattern = '^https?://'
     unicode_uri_pattern = re.compile(uri_pattern, re.UNICODE)
     if not re.search(unicode_uri_pattern, url):
         url = 'http://' + url
