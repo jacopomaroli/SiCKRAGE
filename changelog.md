@@ -1,6 +1,7 @@
 # Changelog
 
-- * 8f00c06 - 2019-02-24: Release v9.4.77 
+- * a706220 - 2019-02-24: Switched from using &#x60;file&#x60; to &#x60;io.open&#x60; 
+- * a72ca25 - 2019-02-24: Release v9.4.77 
 - * b09d78a - 2019-02-24: Added Anime regex for Erai-raws 
 - * e0f2db6 - 2019-02-24: Release v9.4.76 
 - * ed84483 - 2019-02-24: Fixed IndexerErrors for TV cache. Added files to .gitignore related to AniDB. 
