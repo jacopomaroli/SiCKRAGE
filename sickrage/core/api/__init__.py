@@ -59,7 +59,7 @@ class API(object):
         except TokenExpiredError:
             self.refresh_token()
             return self._request(method, url, **kwargs)
-        except (InvalidClientIdError, MissingTokenError) as e:
+        except (InvalidClientIdError, MissingTokenError):
             sickrage.app.log.warning("SiCKRAGE token issue, please try logging out and back in again to the web-ui")
 
     def refresh_token(self):
@@ -69,7 +69,7 @@ class API(object):
 
         try:
             self.token = self.session.refresh_token(self.token_url, **extras)
-        except InvalidGrantError as e:
+        except InvalidGrantError:
             self.token = ''
 
         return self.token

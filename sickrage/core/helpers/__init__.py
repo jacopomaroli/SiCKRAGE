@@ -38,14 +38,15 @@ import traceback
 import uuid
 import webbrowser
 import zipfile
+from builtins import range, int
 from collections import OrderedDict
 from contextlib import contextmanager
 
 import rarfile
 import requests
-import six
 from bs4 import BeautifulSoup
-from six.moves.urllib.parse import urlparse
+from future.moves.urllib.parse import urlparse
+from future.utils import text_type, string_types, iteritems
 
 import sickrage
 from sickrage.core.common import Quality, SKIPPED, WANTED, FAILED, UNAIRED
@@ -94,7 +95,7 @@ def argToBool(x):
     convert argument of unknown type to a bool:
     """
 
-    if isinstance(x, six.string_types):
+    if isinstance(x, string_types):
         if x.lower() in ("0", "false", "f", "no", "n", "off"):
             return False
         elif x.lower() in ("1", "true", "t", "yes", "y", "on"):
@@ -226,7 +227,7 @@ def remove_non_release_groups(name):
     ])
 
     _name = name
-    for remove_string, remove_type in six.iteritems(removeWordsList):
+    for remove_string, remove_type in iteritems(removeWordsList):
         if remove_type == 'search':
             _name = _name.replace(remove_string, '')
         elif remove_type == 'searchre':
@@ -262,7 +263,7 @@ def is_torrent_or_nzb_file(filename):
     :return: ``True`` if the ``filename`` is a NZB file or a torrent file, ``False`` otherwise
     """
 
-    if not isinstance(filename, six.string_types):
+    if not isinstance(filename, string_types):
         return False
 
     return filename.rpartition('.')[2].lower() in ['nzb', 'torrent']
@@ -860,7 +861,7 @@ def anon_url(*url):
     Return a URL string consisting of the Anonymous redirect URL and an arbitrary number of values appended.
     """
 
-    url = ''.join(map(unicode, url))
+    url = ''.join(map(text_type, url))
 
     # Handle URL's containing https or http, previously only handled http
     uri_pattern = '^https?://'
@@ -1222,7 +1223,7 @@ def verify_freespace(src, dest, oldfile=None):
 
         def disk_usage(path):
             __, total, free = ctypes.c_ulonglong(), ctypes.c_ulonglong(), ctypes.c_ulonglong()
-            if sys.version_info >= (3,) or isinstance(path, unicode):
+            if sys.version_info >= (3,) or isinstance(path, text_type):
                 fun = ctypes.windll.kernel32.GetDiskFreeSpaceExW
             else:
                 fun = ctypes.windll.kernel32.GetDiskFreeSpaceExA
@@ -1350,7 +1351,7 @@ def getFreeSpace(directories):
             if os.name == 'nt':
                 __, total, free = ctypes.c_ulonglong(), ctypes.c_ulonglong(), ctypes.c_ulonglong()
 
-                if sys.version_info >= (3,) or isinstance(folder, unicode):
+                if sys.version_info >= (3,) or isinstance(folder, text_type):
                     fun = ctypes.windll.kernel32.GetDiskFreeSpaceExW
                 else:
                     fun = ctypes.windll.kernel32.GetDiskFreeSpaceExA
@@ -1521,11 +1522,11 @@ def convert_size(size, default=0, units=None):
 
     size *= 1024 ** units.index(unit.upper())
 
-    return max(long(size), 0)
+    return max(int(size), 0)
 
 
 def randomString(size=8, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for x in xrange(size))
+    return ''.join(random.choice(chars) for x in range(size))
 
 
 def clean_url(url):
@@ -1706,8 +1707,8 @@ def checkbox_to_value(option, value_on=True, value_off=False):
 
     if isinstance(option, list):
         option = option[-1]
-    if isinstance(option, six.string_types):
-        option = six.text_type(option).strip().lower()
+    if isinstance(option, string_types):
+        option = text_type(option).strip().lower()
 
     if option in (True, 'on', 'true', value_on) or try_int(option) > 0:
         return value_on

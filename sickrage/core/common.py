@@ -22,6 +22,7 @@ from __future__ import print_function, unicode_literals
 import operator
 import os.path
 import re
+from functools import reduce
 
 from sickrage.core.helpers.metadata import getFileMetadata, getResolution
 

@@ -18,12 +18,14 @@
 
 from __future__ import unicode_literals
 
+from future.builtins import int
+
 
 class Show(object):
     def __init__(self):
         self.name = "Show Name"
         self.genre = "Comedy"
-        self.indexerid = 00001
+        self.indexerid = int('00001')
         self.air_by_date = 0
         self.startyear = 2011
         self.sports = 0

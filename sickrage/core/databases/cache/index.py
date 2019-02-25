@@ -20,7 +20,7 @@ from __future__ import unicode_literals
 
 from hashlib import md5
 
-from CodernityDB.hash_index import HashIndex
+from CodernityDB3.hash_index import HashIndex
 
 
 class CacheLastUpdateIndex(HashIndex):

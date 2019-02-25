@@ -22,10 +22,20 @@ from __future__ import unicode_literals
 import io
 import os
 
-from hachoir_core import config as hachoir_config
-from hachoir_core.stream import StringInputStream
-from hachoir_metadata import extractMetadata
-from hachoir_parser import guessParser
+from future.utils import text_type
+
+try:
+    # py2
+    from hachoir_core import config as hachoir_config
+    from hachoir_core.stream import StringInputStream
+    from hachoir_metadata import extractMetadata
+    from hachoir_parser import guessParser
+except ImportError:
+    # py3
+    from hachoir.core import config as hachoir_config
+    from hachoir.metadata import extractMetadata
+    from hachoir.parser import guessParser
+    from hachoir.stream import StringInputStream
 
 import sickrage
 from sickrage.core.helpers import copy_file
@@ -307,7 +317,7 @@ class ImageCache(object):
                         if cur_file_type is None:
                             sickrage.app.log.warning(
                                 "Unable to retrieve image type {}, not using the image from {}".format(
-                                    unicode(cur_file_type), cur_file_name))
+                                    text_type(cur_file_type), cur_file_name))
                             continue
 
                         sickrage.app.log.debug("Checking if image " + cur_file_name + " (type " + str(

@@ -1,6 +1,7 @@
 # Changelog
 
-- * d21ae73 - 2019-02-24: Added urlparse py3 compatibility 
+- * 60439d9 - 2019-02-24: Adding in Python3 compatibility with backwards compatibility for Python 2.6+ 
+- * eec9e24 - 2019-02-24: Added urlparse py3 compatibility 
 - * b592f23 - 2019-02-24: Switched from using &#x60;file&#x60; to &#x60;io.open&#x60; 
 - * a72ca25 - 2019-02-24: Release v9.4.77 
 - * b09d78a - 2019-02-24: Added Anime regex for Erai-raws 

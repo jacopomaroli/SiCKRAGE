@@ -28,6 +28,7 @@ import re
 import zipfile
 
 from babelfish import Language, language_converters
+from future.utils import text_type
 from guessit import guessit
 from requests import Session
 from subliminal import Provider
@@ -39,7 +40,7 @@ from subliminal.video import Episode, Movie
 
 logger = logging.getLogger(__name__)
 
-language_converters.register(b'subscene = sickrage.subtitles.converters.subscene:SubsceneConverter')
+language_converters.register(text_type('subscene = sickrage.subtitles.converters.subscene:SubsceneConverter'))
 
 
 class SubsceneSubtitle(Subtitle):

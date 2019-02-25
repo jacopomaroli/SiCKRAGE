@@ -26,12 +26,11 @@ import time
 import traceback
 from sqlite3 import OperationalError
 
-from CodernityDB.database import RecordDeleted, RecordNotFound
-from CodernityDB.database_super_thread_safe import SuperThreadSafeDatabase
-from CodernityDB.index import IndexNotFoundException, IndexConflict, IndexException
-from CodernityDB.storage import IU_Storage
-
 import sickrage
+from CodernityDB3.database import RecordDeleted, RecordNotFound
+from CodernityDB3.database_super_thread_safe import SuperThreadSafeDatabase
+from CodernityDB3.index import IndexNotFoundException, IndexConflict, IndexException
+from CodernityDB3.storage import IU_Storage
 from sickrage.core.helpers import randomString
 
 

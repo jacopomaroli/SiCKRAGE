@@ -34,9 +34,9 @@ from apscheduler.schedulers.tornado import TornadoScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from dateutil import tz
 from fake_useragent import UserAgent
+from future.moves import urllib
+from future.moves.urllib.parse import urlparse
 from keycloak.realm import KeycloakRealm
-from six.moves import urllib
-from six.moves.urllib.parse import urlparse
 from tornado.ioloop import IOLoop
 
 import sickrage

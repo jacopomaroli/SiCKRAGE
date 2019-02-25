@@ -20,13 +20,14 @@ from __future__ import unicode_literals
 
 import io
 import ssl
-import urllib2
 
 import certifi
 import cfscrape
 import requests
 from cachecontrol import CacheControlAdapter
 from fake_useragent import UserAgent
+from future.backports.urllib.parse import splittype
+from future.utils import text_type
 from requests import Session
 from requests.utils import dict_from_cookiejar
 from urllib3 import disable_warnings
@@ -39,7 +40,7 @@ from sickrage.core.helpers.encoding import to_unicode
 def _add_proxies():
     if sickrage.app.config.proxy_setting:
         sickrage.app.log.debug("Using global proxy: " + sickrage.app.config.proxy_setting)
-        scheme, address = urllib2.splittype(sickrage.app.config.proxy_setting)
+        scheme, address = splittype(sickrage.app.config.proxy_setting)
         address = ('http://{}'.format(sickrage.app.config.proxy_setting),
                    sickrage.app.config.proxy_setting)[scheme]
         return {"http": address, "https": address}
@@ -155,7 +156,7 @@ class WebHooks(object):
         sickrage.app.log.debug('User-Agent: {}'.format(request.headers['User-Agent']))
 
         if request.method.upper() == 'POST':
-            if isinstance(request.body, unicode):
+            if isinstance(request.body, text_type):
                 sickrage.app.log.debug('With post data: {}'.format(request.body))
             else:
                 sickrage.app.log.debug('With post data: {}'.format(to_unicode(request.body)))

@@ -27,10 +27,10 @@ from collections import OrderedDict
 from datetime import datetime
 from operator import itemgetter
 
+from future.moves.urllib.parse import urlparse
+from future.utils import text_type
 from requests import RequestException
 from simplejson import JSONDecodeError
-from six import text_type
-from six.moves.urllib.parse import urlparse
 
 import sickrage
 from sickrage.core.websession import WebSession
@@ -264,7 +264,7 @@ class Episode(dict):
             if isinstance(cur_value, dict) or key is None or cur_value is None:
                 continue
 
-            cur_key, cur_value = unicode(cur_key).lower(), unicode(cur_value).lower()
+            cur_key, cur_value = text_type(cur_key).lower(), text_type(cur_value).lower()
             if cur_key != key:
                 continue
             if cur_value.find(term.lower()) > -1:

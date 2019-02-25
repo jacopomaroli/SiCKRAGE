@@ -28,10 +28,10 @@ import threading
 import traceback
 
 import send2trash
-from CodernityDB.database import RevConflict
 from unidecode import unidecode
 
 import sickrage
+from CodernityDB3.database import RevConflict
 from sickrage.core.api.imdb import IMDbAPI
 from sickrage.core.blackandwhitelist import BlackAndWhiteList
 from sickrage.core.caches import image_cache

@@ -19,12 +19,13 @@
 from __future__ import unicode_literals
 
 import requests
+from future.utils import iteritems
 
 from .errors import RequestFanartError, ResponseFanartError
 
 
 def values(obj):
-    return [v for k, v in obj.__dict__.iteritems() if not k.startswith('_')]
+    return [v for k, v in iteritems(obj.__dict__) if not k.startswith('_')]
 
 
 BASEURL = 'http://webservice.fanart.tv/v3'
