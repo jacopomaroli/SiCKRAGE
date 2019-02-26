@@ -40,12 +40,12 @@
                             <button id="prevShow" class="btn fas fa-arrow-left"></button>
                         </div>
                         <select class="form-control" id="pickShow" title="Change Show">
-                            % for curShowList in sortedShowLists:
-                                % if len(sortedShowLists) > 1:
-                                    <optgroup label="${curShowList[0]}">
+                            % for show_list_name, show_list in sortedShowLists.items():
+                                % if len(show_list) > 1:
+                                    <optgroup label="${show_list}">
                                 % endif
-                                % for curShow in curShowList[1]:
-                                    <option value="${curShow.indexerid}" ${('', 'selected')[curShow == show]}>${curShow.name}</option>
+                                % for cur_show in show_list:
+                                    <option value="${cur_show.indexerid}" ${('', 'selected')[cur_show == show]}>${cur_show.name}</option>
                                 % endfor
                                 % if len(sortedShowLists) > 1:
                                     </optgroup>

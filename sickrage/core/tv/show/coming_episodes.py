@@ -16,9 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import datetime
+from functools import cmp_to_key
 
 import sickrage
 from sickrage.core.common import Quality, get_quality_string, WANTED, UNAIRED, timeFormat, dateFormat
@@ -34,9 +35,9 @@ class ComingEpisodes:
     """
     categories = ['later', 'missed', 'soon', 'today']
     sorts = {
-        'date': (lambda a, b: cmp(a['localtime'], b['localtime'])),
-        'network': (lambda a, b: cmp((a['network'], a['localtime']), (b['network'], b['localtime']))),
-        'show': (lambda a, b: cmp((a['show_name'], a['localtime']), (b['show_name'], b['localtime']))),
+        'date': cmp_to_key(lambda a, b: a['localtime'] < b['localtime']),
+        'network': cmp_to_key(lambda a, b: (a['network'], a['localtime']) < (b['network'], b['localtime'])),
+        'show': cmp_to_key(lambda a, b: (a['show_name'], a['localtime']) < (b['show_name'], b['localtime'])),
     }
 
     def __init__(self):
@@ -114,7 +115,7 @@ class ComingEpisodes:
                 sickrage.app.tz_updater.parse_date_time(item['airdate'], item['airs'], item['network']),
                 convert=True).dt
 
-        results.sort(ComingEpisodes.sorts[sort])
+        results.sort(key=ComingEpisodes.sorts[sort])
 
         if not group:
             return results

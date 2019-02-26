@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import datetime
 import os
@@ -28,9 +28,9 @@ import sys
 import threading
 import time
 import traceback
-import urllib
-import urlparse
 import uuid
+from urllib.parse import uses_netloc
+from urllib.request import FancyURLopener
 
 from apscheduler.schedulers.tornado import TornadoScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -162,7 +162,7 @@ class Core(object):
         threading.currentThread().setName('CORE')
 
         # patch modules with encoding kludge
-        patch_modules()
+        # patch_modules()
 
         # init core classes
         self.notifier_providers = NotifierProviders()
@@ -241,8 +241,8 @@ class Core(object):
         if self.config.random_user_agent:
             self.user_agent = UserAgent().random
 
-        urlparse.uses_netloc.append('scgi')
-        urllib.FancyURLopener.version = self.user_agent
+        uses_netloc.append('scgi')
+        FancyURLopener.version = self.user_agent
 
         # set torrent client web url
         torrent_webui_url(True)
@@ -484,9 +484,9 @@ class Core(object):
         self.event_queue.start()
 
         # fire off startup events
-        self.event_queue.fire_event(self.name_cache.build_all)
-        self.event_queue.fire_event(self.version_updater.run)
-        self.event_queue.fire_event(self.tz_updater.run)
+        # self.event_queue.fire_event(self.name_cache.build_all)
+        # self.event_queue.fire_event(self.version_updater.run)
+        # self.event_queue.fire_event(self.tz_updater.run)
 
         # start webserver
         self.wserver.start()

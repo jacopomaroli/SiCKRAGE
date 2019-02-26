@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import datetime
 import io
@@ -24,13 +24,13 @@ import os
 from xml.etree.ElementTree import Element, ElementTree, SubElement
 
 import sickrage
-from mediabrowser import MediaBrowserMetadata
 from sickrage.core.common import dateFormat
 from sickrage.core.exceptions import ShowNotFoundException
 from sickrage.core.helpers import replaceExtension, indentXML, chmod_as_parent
 from sickrage.indexers import IndexerApi
 from sickrage.indexers.exceptions import indexer_episodenotfound, \
     indexer_error, indexer_seasonnotfound, indexer_shownotfound
+from sickrage.metadata.mediabrowser import MediaBrowserMetadata
 
 
 class Mede8erMetadata(MediaBrowserMetadata):
@@ -312,7 +312,7 @@ class Mede8erMetadata(MediaBrowserMetadata):
                     writer.text = myEp['writer']
 
                 cast = SubElement(episode, "cast")
-                if getattr(myEp, 'gueststars', None) and isinstance(myEp['gueststars'], basestring):
+                if getattr(myEp, 'gueststars', None) and isinstance(myEp['gueststars'], str):
                     for actor in (x.strip() for x in myEp['gueststars'].split('|') if x.strip()):
                         cur_actor = SubElement(cast, "actor")
                         cur_actor.text = actor

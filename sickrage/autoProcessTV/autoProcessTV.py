@@ -17,12 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage. If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import io
 import os.path
 import sys
-from ConfigParser import RawConfigParser, NoOptionError
+from configparser import RawConfigParser, NoOptionError
 
 import requests
 

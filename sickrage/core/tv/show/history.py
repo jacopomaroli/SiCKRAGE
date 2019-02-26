@@ -16,12 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import re
-import urllib
 from datetime import datetime
 from datetime import timedelta
+from urllib.parse import unquote
 
 import sickrage
 from sickrage.core.common import Quality, SNATCHED, SUBTITLED, FAILED, WANTED
@@ -221,11 +221,11 @@ class FailedHistory(object):
     def prepareFailedName(release):
         """Standardizes release name for failed DB"""
 
-        fixed = urllib.unquote(release)
+        fixed = unquote(release)
         if fixed.endswith(".nzb"):
             fixed = fixed.rpartition(".")[0]
 
-        fixed = re.sub("[\.\-\+\ ]", "_", fixed)
+        fixed = re.sub(r"[\.\-\+\ ]", "_", fixed)
         fixed = fixed
 
         return fixed

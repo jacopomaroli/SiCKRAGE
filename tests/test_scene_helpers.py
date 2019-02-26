@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function, unicode_literals
+
 
 import unittest
 
@@ -54,25 +54,6 @@ class SceneTests(tests.SiCKRAGETestDBCase):
     def _test_filterBadReleases(self, name, expected):
         result = show_names.filterBadReleases(name)
         self.assertEqual(result, expected)
-
-    def _test_isGoodName(self, name, show):
-        self.assertTrue(show_names.isGoodResult(name, show))
-
-    def test_isGoodName(self):
-        list_of_cases = [('Show.Name.S01E02.Test-Test', 'Show/Name'),
-                         ('Show.Name.S01E02.Test-Test', 'Show. Name'),
-                         ('Show.Name.S01E02.Test-Test', 'Show- Name'),
-                         ('Show.Name.Part.IV.Test-Test', 'Show Name'),
-                         ('Show.Name.S01.Test-Test', 'Show Name'),
-                         ('Show.Name.E02.Test-Test', 'Show: Name'),
-                         ('Show Name Season 2 Test', 'Show: Name')]
-
-        for testCase in list_of_cases:
-            scene_name, show_name = testCase
-            s = TVShow(1, 0)
-            s.name = show_name
-            s.save_to_db()
-            self._test_isGoodName(scene_name, s)
 
     def test_sceneToNormalShowNames(self):
         self._test_sceneToNormalShowNames('Show Name 2010', ['Show Name 2010', 'Show Name (2010)'])

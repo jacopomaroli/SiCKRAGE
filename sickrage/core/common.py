@@ -17,18 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function, unicode_literals
+
 
 import operator
 import os.path
 import re
+from collections import UserDict
+from functools import reduce
 
 from sickrage.core.helpers.metadata import getFileMetadata, getResolution
-
-try:
-    from UserDict import UserDict
-except:
-    from collections import UserDict
 
 ### CPU Presets for sleep timers
 cpu_presets = {
@@ -573,7 +570,7 @@ class StatusStrings(UserDict):
         the old StatusStrings is fully deprecated, then we will raise a KeyError instead, where appropriate.
         """
         if isinstance(key, int):  # if the key is already an int...
-            if key in self.keys() + Quality.DOWNLOADED + Quality.SNATCHED + Quality.SNATCHED_PROPER + Quality.SNATCHED_BEST + Quality.ARCHIVED + Quality.FAILED:
+            if key in list(self.keys()) + Quality.DOWNLOADED + Quality.SNATCHED + Quality.SNATCHED_PROPER + Quality.SNATCHED_BEST + Quality.ARCHIVED + Quality.FAILED:
                 status, quality = Quality.splitCompositeStatus(key)
                 if quality == Quality.NONE:  # If a Quality is not listed... (shouldn't this be 'if not quality:'?)
                     return self[status]  # ...return the status...

@@ -50,7 +50,7 @@
                                 <span class="fas fa-glasses"></span>
                             </span>
                         </div>
-                        <% anyQualityList = filter(lambda x: x > Quality.NONE, Quality.qualityStrings) %>
+                        <% anyQualityList = list(filter(lambda x: x > Quality.NONE, Quality.qualityStrings)) %>
                         <select id="anyQualities" name="anyQualities" multiple="multiple" size="${len(anyQualityList)}"
                                 class="form-control form-control-inline input-sm" title="anyQualities">
                             % for curQuality in sorted(anyQualityList):
@@ -68,7 +68,7 @@
                                 <span class="fas fa-glasses"></span>
                             </span>
                         </div>
-                        <% bestQualityList = filter(lambda x: Quality.SDTV <= x < Quality.UNKNOWN, Quality.qualityStrings) %>
+                        <% bestQualityList = list(filter(lambda x: Quality.SDTV <= x < Quality.UNKNOWN, Quality.qualityStrings)) %>
                         <select id="bestQualities" name="bestQualities" multiple="multiple"
                                 size="${len(bestQualityList)}" class="form-control form-control-inline"
                                 title="bestQualities">

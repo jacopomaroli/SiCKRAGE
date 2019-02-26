@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function, unicode_literals
+
 
 import gettext
 import io
@@ -41,7 +41,7 @@ if not (LIBS_DIR in sys.path):
     sys.path.extend(remainder)
 
 LOCALE_DIR = os.path.join(PROG_DIR, 'locale')
-gettext.install('messages', LOCALE_DIR, unicode=1, codeset='UTF-8', names=["ngettext"])
+gettext.install('messages', LOCALE_DIR, codeset='UTF-8', names=["ngettext"])
 
 import sickrage
 from sickrage.core.databases.cache import CacheDB

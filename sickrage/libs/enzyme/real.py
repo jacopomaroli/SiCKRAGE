@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 
 __all__ = ['Parser']
@@ -25,6 +25,7 @@ import logging
 import struct
 
 import core
+
 from .exceptions import ParseError
 
 # http://www.pcisys.net/~melanson/codecs/rmff.htm

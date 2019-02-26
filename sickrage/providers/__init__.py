@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import datetime
 import importlib
@@ -28,10 +28,10 @@ import re
 from base64 import b16encode, b32decode, b64decode
 from collections import OrderedDict, defaultdict
 from time import sleep
-from urlparse import urljoin
+from urllib.parse import urljoin
 from xml.sax import SAXParseException
 
-import bencode
+from bencode3 import bdecode, bencode
 from feedparser import FeedParserDict
 from requests.utils import add_dict_to_cookiejar, dict_from_cookiejar
 
@@ -641,7 +641,7 @@ class TorrentProvider(GenericProvider):
 
         def verify_torrent(content):
             try:
-                if bencode.bdecode(content).get('info'):
+                if bdecode(content).get('info'):
                     return content
             except Exception:
                 pass
@@ -738,14 +738,14 @@ class TorrentProvider(GenericProvider):
 
             # adds public torrent trackers to content
             if result.content:
-                decoded_data = bencode.bdecode(result.content)
+                decoded_data = bdecode(result.content)
                 if not decoded_data.get('announce-list'):
                     decoded_data[b'announce-list'] = []
 
                 for tracker in trackers_list:
                     if tracker not in decoded_data['announce-list']:
                         decoded_data['announce-list'].append([str(tracker)])
-                result.content = bencode.bencode(decoded_data)
+                result.content = bencode(decoded_data)
 
         return result
 
@@ -912,7 +912,7 @@ class TorrentRssProvider(TorrentProvider):
             else:
                 try:
                     torrent_file = self.session.get(url).content
-                    bencode.bdecode(torrent_file)
+                    bdecode(torrent_file)
                 except Exception as e:
                     if data:
                         self.dumpHTML(torrent_file)
@@ -1335,13 +1335,13 @@ class SearchProviders(dict):
         return dict([(pID, pObj) for pID, pObj in self.all().items() if not pObj.isEnabled])
 
     def all(self):
-        return dict(self.nzb().items() + self.torrent().items() + self.newznab().items() + self.torrentrss().items())
+        return {**self.nzb(), **self.torrent(), **self.newznab(), **self.torrentrss()}
 
     def all_nzb(self):
-        return dict(self.nzb().items() + self.newznab().items())
+        return {**self.nzb(), **self.newznab()}
 
     def all_torrent(self):
-        return dict(self.torrent().items() + self.torrentrss().items())
+        return {**self.torrent(), **self.torrentrss()}
 
     def nzb(self):
         return self[NZBProvider.type]

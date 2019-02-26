@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import os
 import threading
@@ -165,7 +165,7 @@ class PostProcessorItem(srQueueItem):
         try:
             sickrage.app.log.info("Started {} post-processing job for: {}".format(self.proc_type, self.dirName))
 
-            self.result = unicode(processDir(
+            self.result = str(processDir(
                 dirName=self.dirName,
                 nzbName=self.nzbName,
                 process_method=self.process_method,

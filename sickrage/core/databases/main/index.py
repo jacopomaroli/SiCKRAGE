@@ -16,161 +16,250 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
 
 from hashlib import md5
 
-from CodernityDB.hash_index import HashIndex
+from CodernityDB3.hash_index import HashIndex
 
 
 class MainVersionIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainVersionIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'version' and data.get('database_version'):
-            return data.get('database_version'), None
+            key = data.get('database_version')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainTVShowsIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainTVShowsIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'tv_shows' and data.get('indexer_id'):
-            return data.get('indexer_id'), None
+            key = data.get('indexer_id')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainTVEpisodesIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainTVEpisodesIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'tv_episodes' and data.get('showid'):
-            return data.get('showid'), None
+            key = data.get('showid')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainIMDBInfoIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainIMDBInfoIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'imdb_info' and data.get('indexer_id'):
-            return data.get('indexer_id'), None
+            key = data.get('indexer_id')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainSceneNumberingIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainSceneNumberingIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'scene_numbering' and data.get('indexer_id'):
-            return data.get('indexer_id'), None
+            key = data.get('indexer_id')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainXEMRefreshIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainXEMRefreshIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'xem_refresh' and data.get('indexer_id'):
-            return data.get('indexer_id'), None
+            key = data.get('indexer_id')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainIndexerMappingIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainIndexerMappingIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'indexer_mapping' and data.get('indexer_id'):
-            return data.get('indexer_id'), None
+            key = data.get('indexer_id')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainHistoryIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainHistoryIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'history' and data.get('showid'):
-            return data.get('showid'), None
+            key = data.get('showid')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainBlacklistIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainBlacklistIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'blacklist' and data.get('show_id'):
-            return data.get('show_id'), None
+            key = data.get('show_id')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainWhitelistIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainWhitelistIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'whitelist' and data.get('show_id'):
-            return data.get('show_id'), None
+            key = data.get('show_id')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainFailedSnatchesIndex(HashIndex):
@@ -180,24 +269,42 @@ class MainFailedSnatchesIndex(HashIndex):
         kwargs['key_format'] = '32s'
         super(MainFailedSnatchesIndex, self).__init__(*args, **kwargs)
 
+    def make_key(self, key):
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
+
     def make_key_value(self, data):
         if data.get('_t') == 'failed_snatches' and data.get('release'):
-            return md5(data.get('release')).hexdigest(), None
-
-    def make_key(self, key):
-        return md5(key.encode('utf-8')).hexdigest()
+            key = data.get('release')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
 
 class MainFailedSnatchHistoryIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(MainFailedSnatchHistoryIndex, self).__init__(*args, **kwargs)
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
     def make_key_value(self, data):
         if data.get('_t') == 'failed_snatch_history' and data.get('showid'):
-            return data.get('showid'), None
+            key = data.get('showid')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None

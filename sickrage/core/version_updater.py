@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import os
 import platform
@@ -306,7 +306,7 @@ class UpdateManager(object):
             exit_status = p.returncode
 
             if output:
-                output = output.strip()
+                output = output.decode().strip()
 
         except OSError:
             sickrage.app.log.info("Command " + ' '.join(cmd) + " didn't work")

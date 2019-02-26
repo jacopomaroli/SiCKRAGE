@@ -17,16 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
 
-try:
-    from Queue import PriorityQueue, Empty, Queue
-except ImportError:
-    from queue import PriorityQueue, Empty, Queue
-
-import time
 import datetime
 import threading
+import time
+from queue import PriorityQueue, Queue
 
 import sickrage
 

@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
 
 import os
 
@@ -75,7 +74,6 @@ class MainDB(srDatabase):
 
         while current_version < self._version:
             dbData = list(self.all('version'))[-1]
-
             new_version = current_version + 1
             dbData['database_version'] = new_version
 

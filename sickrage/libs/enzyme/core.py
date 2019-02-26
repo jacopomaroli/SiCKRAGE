@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import logging
 import re
@@ -105,7 +105,7 @@ class Media(object):
                 continue
             if key in UNPRINTABLE_KEYS:
                 value = '<unprintable data, size=%d>' % len(value)
-            result += '| %10s: %s\n' % (unicode(key), unicode(value))
+            result += '| %10s: %s\n' % (str(key), str(value))
 
         # print tags (recursively, to support nested tags).
         def print_tags(tags, suffix, show_label):
@@ -129,7 +129,7 @@ class Media(object):
                 if key not in ['tracks', 'subtitles', 'chapters']:
                     label += ' Track'
                 result += '%s #%d\n' % (label, n + 1)
-                result += '|    ' + re.sub(r'\n(.)', r'\n|    \1', unicode(item))
+                result += '|    ' + re.sub(r'\n(.)', r'\n|    \1', str(item))
 
         # print tables
         #FIXME: WTH?
@@ -138,7 +138,7 @@ class Media(object):
 #                result += '+-- Table %s\n' % str(name)
 #                for key, value in table.items():
 #                    try:
-#                        value = unicode(value)
+#                        value = str(value)
 #                        if len(value) > 50:
 #                            value = '<unprintable data, size=%d>' % len(value)
 #                    except (UnicodeDecodeError, TypeError):
@@ -146,11 +146,11 @@ class Media(object):
 #                            value = '<unprintable data, size=%d>' % len(value)
 #                        except AttributeError:
 #                            value = '<unprintable data>'
-#                    result += '|    | %s: %s\n' % (unicode(key), value)
+#                    result += '|    | %s: %s\n' % (str(key), value)
         return result
 
     def __str__(self):
-        return unicode(self).encode()
+        return str(self).encode()
 
     def __repr__(self):
         if hasattr(self, 'url'):
@@ -316,7 +316,7 @@ class Tag(object):
         self.binary = binary
 
     def __unicode__(self):
-        return unicode(self.value)
+        return str(self.value)
 
     def __str__(self):
         return str(self.value)

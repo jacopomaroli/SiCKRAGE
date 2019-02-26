@@ -16,15 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
 
 from hashlib import md5
 
-from CodernityDB.hash_index import HashIndex
+from CodernityDB3.hash_index import HashIndex
 
 
 class CacheLastUpdateIndex(HashIndex):
-    _version = 4
+    _version = 1
 
     def __init__(self, *args, **kwargs):
         kwargs['key_format'] = '32s'
@@ -32,14 +31,23 @@ class CacheLastUpdateIndex(HashIndex):
 
     def make_key_value(self, data):
         if data.get('_t') == 'lastUpdate' and data.get('provider'):
-            return md5(data.get('provider')).hexdigest(), None
+            key = data.get('provider')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
     def make_key(self, key):
-        return md5(key.encode('utf-8')).hexdigest()
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
 
 class CacheLastSearchIndex(HashIndex):
-    _version = 4
+    _version = 1
 
     def __init__(self, *args, **kwargs):
         kwargs['key_format'] = '32s'
@@ -47,29 +55,47 @@ class CacheLastSearchIndex(HashIndex):
 
     def make_key_value(self, data):
         if data.get('_t') == 'lastSearch' and data.get('provider'):
-            return md5(data.get('provider')).hexdigest(), None
+            key = data.get('provider')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
     def make_key(self, key):
-        return md5(key.encode('utf-8')).hexdigest()
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
 
 class CacheSceneExceptionsIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(CacheSceneExceptionsIndex, self).__init__(*args, **kwargs)
 
     def make_key_value(self, data):
         if data.get('_t') == 'scene_exceptions' and data.get('indexer_id'):
-            return data.get('indexer_id'), None
+            key = data.get('indexer_id')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
 
 class CacheSceneNamesIndex(HashIndex):
-    _version = 4
+    _version = 1
 
     def __init__(self, *args, **kwargs):
         kwargs['key_format'] = '32s'
@@ -77,14 +103,23 @@ class CacheSceneNamesIndex(HashIndex):
 
     def make_key_value(self, data):
         if data.get('_t') == 'scene_names' and data.get('name'):
-            return md5(data.get('name')).hexdigest(), None
+            key = data.get('name')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
     def make_key(self, key):
-        return md5(key.encode('utf-8')).hexdigest()
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
 
 class CacheNetworkTimezonesIndex(HashIndex):
-    _version = 4
+    _version = 1
 
     def __init__(self, *args, **kwargs):
         kwargs['key_format'] = '32s'
@@ -92,14 +127,23 @@ class CacheNetworkTimezonesIndex(HashIndex):
 
     def make_key_value(self, data):
         if data.get('_t') == 'network_timezones' and data.get('network_name'):
-            return md5(data.get('network_name')).hexdigest(), None
+            key = data.get('network_name')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
     def make_key(self, key):
-        return md5(key.encode('utf-8')).hexdigest()
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
 
 class CacheSceneExceptionsRefreshIndex(HashIndex):
-    _version = 4
+    _version = 1
 
     def __init__(self, *args, **kwargs):
         kwargs['key_format'] = '32s'
@@ -107,14 +151,23 @@ class CacheSceneExceptionsRefreshIndex(HashIndex):
 
     def make_key_value(self, data):
         if data.get('_t') == 'scene_exceptions_refresh' and data.get('list'):
-            return md5(data.get('list')).hexdigest(), None
+            key = data.get('list')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
     def make_key(self, key):
-        return md5(key.encode('utf-8')).hexdigest()
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
 
 class CacheProvidersIndex(HashIndex):
-    _version = 4
+    _version = 1
 
     def __init__(self, *args, **kwargs):
         kwargs['key_format'] = '32s'
@@ -122,22 +175,40 @@ class CacheProvidersIndex(HashIndex):
 
     def make_key_value(self, data):
         if data.get('_t') == 'providers' and data.get('provider'):
-            return md5(data.get('provider')).hexdigest(), None
+            key = data.get('provider')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
     def make_key(self, key):
-        return md5(key.encode('utf-8')).hexdigest()
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()
 
 
 class CacheQuicksearchIndex(HashIndex):
     _version = 1
 
     def __init__(self, *args, **kwargs):
-        kwargs['key_format'] = 'I'
+        kwargs['key_format'] = '32s'
         super(CacheQuicksearchIndex, self).__init__(*args, **kwargs)
 
     def make_key_value(self, data):
         if data.get('_t') == 'quicksearch' and data.get('showid'):
-            return data.get('showid'), None
+            key = data.get('showid')
+            if not isinstance(key, bytes):
+                if not isinstance(key, str):
+                    key = str(key)
+                key = key.encode()
+            return md5(key).hexdigest().encode(), None
 
     def make_key(self, key):
-        return key
+        if not isinstance(key, bytes):
+            if not isinstance(key, str):
+                key = str(key)
+            key = key.encode()
+        return md5(key).hexdigest().encode()

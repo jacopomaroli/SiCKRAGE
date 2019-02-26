@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import re
 import time
 from base64 import b16encode, b32decode
 from hashlib import sha1
 
-from bencode import BTFailure, bdecode, bencode
+from bencode3 import bdecode, bencode, BencodeError
 
 import sickrage
 from sickrage.core.websession import WebSession
@@ -293,7 +293,7 @@ class GenericClient(object):
 
             try:
                 torrent_bdecode = bdecode(result.content)
-            except BTFailure:
+            except BencodeError:
                 sickrage.app.log.error('Unable to bdecode torrent')
                 sickrage.app.log.debug('Torrent bencoded data: %r' % result.content)
                 raise

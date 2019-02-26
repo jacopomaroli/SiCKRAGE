@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import collections
 import datetime
@@ -26,7 +26,7 @@ import re
 import threading
 import time
 import traceback
-import urllib
+from urllib.parse import unquote_plus
 
 from tornado.escape import json_encode, recursive_unicode
 from tornado.web import RequestHandler
@@ -609,7 +609,7 @@ def _get_root_dirs():
         return {}
 
     # clean up the list - replace %xx escapes by their single-character equivalent
-    root_dirs = [urllib.unquote_plus(x) for x in root_dirs]
+    root_dirs = [unquote_plus(x) for x in root_dirs]
 
     default_dir = root_dirs[default_index]
 
@@ -1323,7 +1323,7 @@ class CMD_SiCKRAGEAddRootDir(ApiCall):
     def run(self):
         """ Add a new root (parent) directory to SiCKRAGE """
 
-        self.location = urllib.unquote_plus(self.location)
+        self.location = unquote_plus(self.location)
         location_matched = 0
         index = 0
 
@@ -1340,7 +1340,7 @@ class CMD_SiCKRAGEAddRootDir(ApiCall):
             index = int(sickrage.app.config.root_dirs.split('|')[0])
             root_dirs.pop(0)
             # clean up the list - replace %xx escapes by their single-character equivalent
-            root_dirs = [urllib.unquote_plus(x) for x in root_dirs]
+            root_dirs = [unquote_plus(x) for x in root_dirs]
             for x in root_dirs:
                 if x == self.location:
                     location_matched = 1
@@ -1354,7 +1354,7 @@ class CMD_SiCKRAGEAddRootDir(ApiCall):
             else:
                 root_dirs.append(self.location)
 
-        root_dirs_new = [urllib.unquote_plus(x) for x in root_dirs]
+        root_dirs_new = [unquote_plus(x) for x in root_dirs]
         root_dirs_new.insert(0, index)
         root_dirs_new = '|'.join(x for x in root_dirs_new)
 
@@ -1429,7 +1429,7 @@ class CMD_SiCKRAGEDeleteRootDir(ApiCall):
         index = int(root_dirs[0])
         root_dirs.pop(0)
         # clean up the list - replace %xx escapes by their single-character equivalent
-        root_dirs = [urllib.unquote_plus(x) for x in root_dirs]
+        root_dirs = [unquote_plus(x) for x in root_dirs]
         old_root_dir = root_dirs[index]
         for curRootDir in root_dirs:
             if not curRootDir == self.location:
@@ -1442,7 +1442,7 @@ class CMD_SiCKRAGEDeleteRootDir(ApiCall):
                 newIndex = curIndex
                 break
 
-        root_dirs_new = [urllib.unquote_plus(x) for x in root_dirs_new]
+        root_dirs_new = [unquote_plus(x) for x in root_dirs_new]
         if len(root_dirs_new) > 0:
             root_dirs_new.insert(0, newIndex)
         root_dirs_new = "|".join(x for x in root_dirs_new)
@@ -2186,7 +2186,7 @@ class CMD_ShowDelete(ApiCall):
         try:
             sickrage.app.show_queue.removeShow(showObj, bool(self.removefiles))
         except CantRemoveShowException as exception:
-            return _responds(RESULT_FAILURE, msg=exception.message)
+            return _responds(RESULT_FAILURE, msg=str(exception))
 
         return _responds(RESULT_SUCCESS, msg='%s has been queued to be deleted' % showObj.name)
 

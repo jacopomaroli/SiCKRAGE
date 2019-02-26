@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with   If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import base64
 import datetime
@@ -29,7 +29,7 @@ import re
 import sys
 import uuid
 from ast import literal_eval
-from itertools import izip, cycle
+from itertools import cycle
 
 import rarfile
 from apscheduler.triggers.interval import IntervalTrigger
@@ -955,7 +955,7 @@ class Config(object):
             gt.install(unicode=True, names=["ngettext"])
         else:
             # System default language
-            gettext.install('messages', sickrage.LOCALE_DIR, unicode=1, codeset='UTF-8', names=["ngettext"])
+            gettext.install('messages', sickrage.LOCALE_DIR, codeset='UTF-8', names=["ngettext"])
 
         self.gui_lang = lang
 
@@ -1270,7 +1270,7 @@ class Config(object):
 
         try:
             my_val = self.config_obj.get(section, {section: key}).as_int(key)
-        except StandardError:
+        except Exception:
             my_val = def_val
 
         if str(my_val).lower() == "true":
@@ -1291,7 +1291,7 @@ class Config(object):
 
         try:
             my_val = self.config_obj.get(section, {section: key}).as_float(key)
-        except StandardError:
+        except Exception:
             my_val = def_val
 
         if not silent:
@@ -1307,7 +1307,7 @@ class Config(object):
 
         try:
             my_val = self.config_obj.get(section, {section: key}).get(key, def_val)
-        except StandardError:
+        except Exception:
             my_val = def_val
 
         if censor or (section, key) in sickrage.app.log.CENSORED_ITEMS:
@@ -1326,7 +1326,7 @@ class Config(object):
 
         try:
             my_val = list(self.config_obj.get(section, {section: key}).get(key, def_val))
-        except StandardError:
+        except Exception:
             my_val = def_val
 
         if not silent:
@@ -1342,7 +1342,7 @@ class Config(object):
 
         try:
             my_val = dict(literal_eval(self.config_obj.get(section, {section: key}).get(key, def_val)))
-        except StandardError:
+        except Exception:
             my_val = def_val
 
         if not silent:
@@ -1358,7 +1358,7 @@ class Config(object):
 
         try:
             my_val = self.config_obj.get(section, {section: key}).as_bool(key)
-        except StandardError:
+        except Exception:
             my_val = def_val
 
         if not silent:
@@ -2386,18 +2386,18 @@ class Config(object):
                     if _decrypt:
                         section[key] = ''.join(
                             chr(ord(x) ^ ord(y)) for (x, y) in
-                            izip(base64.decodestring(section[key]), cycle(unique_key1)))
+                            zip(base64.decodestring(section[key]), cycle(unique_key1)))
                     else:
                         section[key] = base64.encodestring(
-                            ''.join(chr(ord(x) ^ ord(y)) for (x, y) in izip(section[key], cycle(unique_key1)))).strip()
+                            ''.join(chr(ord(x) ^ ord(y)) for (x, y) in zip(section[key], cycle(unique_key1)))).strip()
                 elif self.encryption_version == 2:
                     if _decrypt:
                         section[key] = ''.join(chr(ord(x) ^ ord(y)) for (x, y) in
-                                               izip(base64.decodestring(section[key]),
+                                               zip(base64.decodestring(section[key]),
                                                     cycle(sickrage.app.config.encryption_secret)))
                     else:
                         section[key] = base64.encodestring(
-                            ''.join(chr(ord(x) ^ ord(y)) for (x, y) in izip(section[key], cycle(
+                            ''.join(chr(ord(x) ^ ord(y)) for (x, y) in zip(section[key], cycle(
                                 sickrage.app.config.encryption_secret)))).strip()
             except:
                 pass

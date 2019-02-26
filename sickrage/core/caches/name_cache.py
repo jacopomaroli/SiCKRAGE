@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import time
 from datetime import datetime, timedelta
@@ -83,7 +83,7 @@ class NameCache(object):
                 if x['indexer_id'] == indexerid or x['name'] == name:
                     sickrage.app.cache_db.delete(x)
 
-            for key, value in self.cache.items():
+            for key, value in self.cache.copy().items():
                 if value == indexerid or key == name:
                     del self.cache[key]
 

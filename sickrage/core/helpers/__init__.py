@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import base64
 import ctypes
@@ -31,16 +31,15 @@ import shutil
 import socket
 import stat
 import string
-import sys
 import tempfile
 import time
 import traceback
-import urlparse
 import uuid
 import webbrowser
 import zipfile
 from collections import OrderedDict
 from contextlib import contextmanager
+from urllib.parse import uses_netloc, urlsplit, urlunsplit, urljoin
 
 import rarfile
 import requests
@@ -345,7 +344,7 @@ def sanitizeFileName(name):
     """
 
     # remove bad chars from the filename
-    name = re.sub(r'[\\/\*]', '-', name)
+    name = re.sub(r'[\\/*]', '-', name)
     name = re.sub(r'[:"<>|?]', '', name)
     name = re.sub(r'\u2122', '', name)  # Trade Mark Sign
 
@@ -372,7 +371,6 @@ def findCertainShow(indexerid, return_show_object=True):
     Find a show by indexer ID in the show list
 
     :param return_show_object: returns a show object if True
-    :param showList: List of shows to search in (needle)
     :param indexerid: Show to look for
     :return: result list
     """
@@ -671,7 +669,7 @@ def chmod_as_parent(child_path):
 
     (Does not work for Windows hosts)
 
-    :param childPath: Child Path to change permissions to sync from parent
+    :param child_path: Child Path to change permissions to sync from parent
     """
 
     if os.name == 'nt' or os.name == 'ce':
@@ -860,10 +858,10 @@ def anon_url(*url):
     Return a URL string consisting of the Anonymous redirect URL and an arbitrary number of values appended.
     """
 
-    url = ''.join(map(unicode, url))
+    url = ''.join(map(str, url))
 
     # Handle URL's containing https or http, previously only handled http
-    uri_pattern = ur'^https?://'
+    uri_pattern = '^https?://'
     unicode_uri_pattern = re.compile(uri_pattern, re.UNICODE)
     if not re.search(unicode_uri_pattern, url):
         url = 'http://' + url
@@ -1138,14 +1136,11 @@ def get_size(start_path='.'):
 def generateApiKey():
     """ Return a new randomized API_KEY"""
 
-    try:
-        from hashlib import md5
-    except ImportError:
-        from md5 import md5
+    from hashlib import md5
 
     # Create some values to seed md5
-    t = str(time.time())
-    r = str(random.random())
+    t = str(time.time()).encode('utf-8')
+    r = str(random.random()).encode('utf-8')
 
     # Create the md5 instance and give it the current time
     m = md5(t)
@@ -1218,14 +1213,10 @@ def verify_freespace(src, dest, oldfile=None):
             return free
 
     elif os.name == 'nt':  # Windows
-        import sys
 
         def disk_usage(path):
             __, total, free = ctypes.c_ulonglong(), ctypes.c_ulonglong(), ctypes.c_ulonglong()
-            if sys.version_info >= (3,) or isinstance(path, unicode):
-                fun = ctypes.windll.kernel32.GetDiskFreeSpaceExW
-            else:
-                fun = ctypes.windll.kernel32.GetDiskFreeSpaceExA
+            fun = ctypes.windll.kernel32.GetDiskFreeSpaceExW
             ret = fun(path, ctypes.byref(__), ctypes.byref(total), ctypes.byref(free))
             if ret == 0:
                 sickrage.app.log.warning("Unable to determine free space, something went wrong")
@@ -1349,12 +1340,7 @@ def getFreeSpace(directories):
         if os.path.isdir(folder):
             if os.name == 'nt':
                 __, total, free = ctypes.c_ulonglong(), ctypes.c_ulonglong(), ctypes.c_ulonglong()
-
-                if sys.version_info >= (3,) or isinstance(folder, unicode):
-                    fun = ctypes.windll.kernel32.GetDiskFreeSpaceExW
-                else:
-                    fun = ctypes.windll.kernel32.GetDiskFreeSpaceExA
-
+                fun = ctypes.windll.kernel32.GetDiskFreeSpaceExW
                 ret = fun(folder, ctypes.byref(__), ctypes.byref(total), ctypes.byref(free))
                 if ret == 0: raise ctypes.WinError()
 
@@ -1521,11 +1507,11 @@ def convert_size(size, default=0, units=None):
 
     size *= 1024 ** units.index(unit.upper())
 
-    return max(long(size), 0)
+    return max(int(size), 0)
 
 
 def randomString(size=8, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for x in xrange(size))
+    return ''.join(random.choice(chars) for __ in range(size))
 
 
 def clean_url(url):
@@ -1534,7 +1520,7 @@ def clean_url(url):
     or an empty string
     """
 
-    urlparse.uses_netloc.append('scgi')
+    uses_netloc.append('scgi')
 
     if url and url.strip():
 
@@ -1543,12 +1529,12 @@ def clean_url(url):
         if '://' not in url:
             url = '//' + url
 
-        scheme, netloc, path, query, fragment = urlparse.urlsplit(url, 'http')
+        scheme, netloc, path, query, fragment = urlsplit(url, 'http')
 
         if not path:
             path += '/'
 
-        cleaned_url = urlparse.urlunsplit((scheme, netloc, path, query, fragment))
+        cleaned_url = urlunsplit((scheme, netloc, path, query, fragment))
 
     else:
         cleaned_url = ''
@@ -1590,8 +1576,8 @@ def app_statistics():
                 show_stat[show.indexerid]['ep_snatched'] = 0
                 show_stat[show.indexerid]['ep_downloaded'] = 0
                 show_stat[show.indexerid]['ep_total'] = 0
-                show_stat[show.indexerid]['ep_airs_next'] = None
-                show_stat[show.indexerid]['ep_airs_prev'] = None
+                show_stat[show.indexerid]['ep_airs_next'] = 0
+                show_stat[show.indexerid]['ep_airs_prev'] = 0
                 show_stat[show.indexerid]['total_size'] = 0
 
             season = epData['season']
@@ -1690,8 +1676,8 @@ def torrent_webui_url(reset=False):
     if sickrage.app.config.torrent_method == 'utorrent':
         torrent_ui_url = '/'.join(s.strip('/') for s in (torrent_ui_url, 'gui/'))
     elif sickrage.app.config.torrent_method == 'download_station':
-        if test_exists(urlparse.urljoin(torrent_ui_url, 'download/')):
-            torrent_ui_url = urlparse.urljoin(torrent_ui_url, 'download/')
+        if test_exists(urljoin(torrent_ui_url, 'download/')):
+            torrent_ui_url = urljoin(torrent_ui_url, 'download/')
 
     sickrage.app.client_web_urls['torrent'] = ('', torrent_ui_url)[test_exists(torrent_ui_url)]
 

@@ -16,11 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
 
 import io
 import ssl
-import urllib2
+from urllib.parse import splittype
 
 import certifi
 import cfscrape
@@ -33,13 +32,12 @@ from urllib3 import disable_warnings
 
 import sickrage
 from sickrage.core.helpers import chmod_as_parent, remove_file_failed
-from sickrage.core.helpers.encoding import to_unicode
 
 
 def _add_proxies():
     if sickrage.app.config.proxy_setting:
         sickrage.app.log.debug("Using global proxy: " + sickrage.app.config.proxy_setting)
-        scheme, address = urllib2.splittype(sickrage.app.config.proxy_setting)
+        scheme, address = splittype(sickrage.app.config.proxy_setting)
         address = ('http://{}'.format(sickrage.app.config.proxy_setting),
                    sickrage.app.config.proxy_setting)[scheme]
         return {"http": address, "https": address}
@@ -155,10 +153,7 @@ class WebHooks(object):
         sickrage.app.log.debug('User-Agent: {}'.format(request.headers['User-Agent']))
 
         if request.method.upper() == 'POST':
-            if isinstance(request.body, unicode):
-                sickrage.app.log.debug('With post data: {}'.format(request.body))
-            else:
-                sickrage.app.log.debug('With post data: {}'.format(to_unicode(request.body)))
+            sickrage.app.log.debug('With post data: {}'.format(request.body))
 
 
 class WebHelpers(object):
@@ -182,8 +177,8 @@ class WebHelpers(object):
             return (
                     resp.status_code == 503
                     and resp.headers.get('Server', '').startswith('cloudflare')
-                    and b'jschl_vc' in resp.content
-                    and b'jschl_answer' in resp.content
+                    and 'jschl_vc' in resp.content
+                    and 'jschl_answer' in resp.content
             )
 
         if is_cloudflare_challenge(resp):

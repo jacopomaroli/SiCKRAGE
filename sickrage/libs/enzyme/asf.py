@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import logging
 import string
@@ -329,7 +329,7 @@ class Asf(core.AVContainer):
             for i in range(0, count):
                 idlen = struct.unpack('<B', s[pos:pos + 1])[0]
                 idstring = s[pos + 1:pos + 1 + idlen]
-                idstring = unicode(idstring, 'utf-16').replace('\0', '')
+                idstring = str(idstring, 'utf-16').replace('\0', '')
                 log.debug('Language: %d/%d: %r' % (i + 1, count, idstring))
                 self._languages.append(idstring)
                 pos += 1 + idlen

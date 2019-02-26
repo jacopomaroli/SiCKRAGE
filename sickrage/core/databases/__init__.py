@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
 
 import os
 import re
@@ -26,12 +25,11 @@ import time
 import traceback
 from sqlite3 import OperationalError
 
-from CodernityDB.database import RecordDeleted, RecordNotFound
-from CodernityDB.database_super_thread_safe import SuperThreadSafeDatabase
-from CodernityDB.index import IndexNotFoundException, IndexConflict, IndexException
-from CodernityDB.storage import IU_Storage
-
 import sickrage
+from CodernityDB3.database import RecordDeleted, RecordNotFound
+from CodernityDB3.database_super_thread_safe import SuperThreadSafeDatabase
+from CodernityDB3.index import IndexNotFoundException, IndexConflict, IndexException
+from CodernityDB3.storage import IU_Storage
 from sickrage.core.helpers import randomString
 
 
@@ -153,7 +151,7 @@ class srDatabase(object):
                         self.db.reindex_index(index_name)
                     except IndexConflict:
                         pass
-                    except:
+                    except Exception as e:
                         sickrage.app.log.debug('Failed adding index %s', index_name)
                         raise
 
@@ -187,7 +185,7 @@ class srDatabase(object):
                     current_version = self._indexes[index_name]._version
 
                     self.check_versions(index_name, current_version, previous_version)
-            except:
+            except Exception as e:
                 sickrage.app.log.debug('Failed adding index {}'.format(index_name))
 
     def check_versions(self, index_name, current_version, previous_version):
@@ -231,11 +229,13 @@ class srDatabase(object):
             data = []
             failed = False
 
+            ids = [a['_id'] for a in [x for x in self.db.all('id')]]
+
             # check integrity of index data
             for x in self.db.all(index_name):
                 try:
                     data += [self.db.get('id', x.get('_id'))]
-                except Exception:
+                except Exception as e:
                     failed = True
 
             # check if we failed integrity check, if so then destroy index
@@ -346,7 +346,7 @@ class srDatabase(object):
     def all(self, *args, **kwargs):
         with_doc = kwargs.pop('with_doc', True)
         for data in self.db.all(*args, **kwargs):
-            if with_doc :
+            if with_doc:
                 try:
                     doc = self.db.get('id', data['_id'])
                     yield doc
@@ -386,6 +386,9 @@ class srDatabase(object):
 
     def insert(self, *args):
         return self.db.insert(*args)
+
+    def destroy(self):
+        return self.db.destroy()
 
 
 # Monkey-Patch storage to suppress logging messages

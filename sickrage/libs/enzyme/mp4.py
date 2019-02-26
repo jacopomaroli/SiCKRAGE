@@ -16,16 +16,17 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 __all__ = ['Parser']
 
-import StringIO
 import logging
 import struct
 import zlib
 
+import StringIO
 import core
+
 from .exceptions import ParseError
 
 # get logging object
@@ -248,7 +249,7 @@ class MPEG4(core.AVContainer):
                 pos += datasize
             if len(i18ntabl.keys()) > 0:
                 for k in i18ntabl.keys():
-                    if QTLANGUAGES.has_key(k) and QTLANGUAGES[k] == 'en':
+                    if k in QTLANGUAGES and QTLANGUAGES[k] == 'en':
                         self._appendtable('QTUDTA', i18ntabl[k])
                         self._appendtable('QTUDTA', tabl)
             else:

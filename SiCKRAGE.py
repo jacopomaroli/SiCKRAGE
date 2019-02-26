@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 # Author: echel0n <echel0n@sickrage.ca>
 # URL: https://sickrage.ca
 #

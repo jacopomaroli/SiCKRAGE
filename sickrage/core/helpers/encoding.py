@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import codecs
 import functools
@@ -105,7 +105,7 @@ def ss(var):
 
 def convert(var):
     if isinstance(var, dict):
-        return {convert(key): convert(value) for key, value in var.iteritems()}
+        return {convert(key): convert(value) for key, value in var.items()}
     elif isinstance(var, (types.GeneratorType, list, tuple)):
         return [convert(element) for element in var]
     elif isinstance(var, str):
@@ -146,15 +146,12 @@ def to_unicode(var):
 
 def strip_accents(name):
     try:
-        # strip accents
-        try:
-            name.decode('ascii')
-        except UnicodeEncodeError:
-            pass
-
         name = unicodedata.normalize('NFKD', name).encode('ASCII', 'ignore')
     except UnicodeDecodeError:
         pass
+
+    if isinstance(name, bytes):
+        name = name.decode()
 
     return name
 

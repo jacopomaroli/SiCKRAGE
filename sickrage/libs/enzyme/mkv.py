@@ -16,20 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
-from __future__ import unicode_literals
 
 import logging
 import re
 from datetime import datetime
 from struct import unpack
 
-import core
-
+from . import core
 from .exceptions import ParseError
 
 __all__ = ['Parser']
-
 
 # get logging object
 log = logging.getLogger(__name__)
@@ -112,7 +108,6 @@ MATROSKA_TAG_NAME_ID = 0x45A3
 MATROSKA_TAG_LANGUAGE_ID = 0x447A
 MATROSKA_TAG_STRING_ID = 0x4487
 MATROSKA_TAG_BINARY_ID = 0x4485
-
 
 # See mkv spec for details:
 # http://www.matroska.org/technical/specs/index.html
@@ -219,6 +214,7 @@ class EbmlEntity:
     This is class that is responsible to handle one Ebml entity as described in
     the Matroska/Ebml spec
     """
+
     def __init__(self, inbuf):
         # Compute the EBML id
         # Set the CRC len to zero
@@ -241,7 +237,7 @@ class EbmlEntity:
             raise ParseError()
 
         self.entity_len, self.len_size = self.compute_len(inbuf[self.id_len:])
-        self.entity_data = inbuf[self.get_header_len() : self.get_total_len()]
+        self.entity_data = inbuf[self.get_header_len(): self.get_total_len()]
         self.ebml_length = self.entity_len
         self.entity_len = min(len(self.entity_data), self.entity_len)
 
@@ -251,14 +247,12 @@ class EbmlEntity:
             for pos, shift in zip(range(self.entity_len), range((self.entity_len - 1) * 8, -1, -8)):
                 self.value |= ord(self.entity_data[pos]) << shift
 
-
     def add_data(self, data):
         maxlen = self.ebml_length - len(self.entity_data)
         if maxlen <= 0:
             return
         self.entity_data += data[:maxlen]
         self.entity_len = len(self.entity_data)
-
 
     def compute_id(self, inbuf):
         self.id_len = 0
@@ -287,7 +281,6 @@ class EbmlEntity:
                              (ord(inbuf[2]) << 8) | (ord(inbuf[3]))
         self.entity_str = inbuf[0:self.id_len]
 
-
     def compute_len(self, inbuf):
         if not inbuf:
             return 0, 0
@@ -311,14 +304,11 @@ class EbmlEntity:
             len = 0
         return len, i + 1
 
-
     def get_crc_len(self):
         return self.crc_len
 
-
     def get_value(self):
         return self.value
-
 
     def get_float_value(self):
         if len(self.entity_data) == 4:
@@ -327,34 +317,26 @@ class EbmlEntity:
             return unpack('!d', self.entity_data)[0]
         return 0.0
 
-
     def get_data(self):
         return self.entity_data
 
-
     def get_utf8(self):
-        return unicode(self.entity_data, 'utf-8', 'replace')
-
+        return str(self.entity_data, 'utf-8', 'replace')
 
     def get_str(self):
-        return unicode(self.entity_data, 'ascii', 'replace')
-
+        return str(self.entity_data, 'ascii', 'replace')
 
     def get_id(self):
         return self.entity_id
 
-
     def get_str_id(self):
         return self.entity_str
-
 
     def get_len(self):
         return self.entity_len
 
-
     def get_total_len(self):
         return self.entity_len + self.id_len + self.len_size
-
 
     def get_header_len(self):
         return self.id_len + self.len_size
@@ -366,6 +348,7 @@ class Matroska(core.AVContainer):
     Matroska video and audio parser. If at least one video stream is
     detected it will set the type to MEDIA_AV.
     """
+
     def __init__(self, file):
         core.AVContainer.__init__(self)
         self.samplerate = 1
@@ -451,7 +434,6 @@ class Matroska(core.AVContainer):
         log.debug('END: process element %r' % hex(elem_id))
         return True
 
-
     def process_seekhead(self, elem):
         for seek_elem in self.process_one_level(elem):
             if seek_elem.get_id() != MATROSKA_SEEK_ID:
@@ -474,16 +456,14 @@ class Matroska(core.AVContainer):
                     elem.add_data(self.file.read(elem.ebml_length))
                     self.process_elem(elem)
 
-
     def process_tracks(self, tracks):
         tracksbuf = tracks.get_data()
         index = 0
         while index < tracks.get_len():
             trackelem = EbmlEntity(tracksbuf[index:])
-            log.debug ('ELEMENT %X found' % trackelem.get_id())
+            log.debug('ELEMENT %X found' % trackelem.get_id())
             self.process_track(trackelem)
             index += trackelem.get_total_len() + trackelem.get_crc_len()
-
 
     def process_one_level(self, item):
         buf = item.get_data()
@@ -525,7 +505,6 @@ class Matroska(core.AVContainer):
             for elem in elements:
                 self.process_track_common(elem, track)
 
-
     def process_track_common(self, elem, track):
         elem_id = elem.get_id()
         if elem_id == MATROSKA_TRACK_LANGUAGE_ID:
@@ -545,7 +524,6 @@ class Matroska(core.AVContainer):
             track.codec_private = elem.get_data()
         elif elem_id == MATROSKA_TRACK_UID_ID:
             self.objects_by_uid[elem.get_value()] = track
-
 
     def process_video_track(self, elements):
         track = core.VideoStream()
@@ -605,7 +583,6 @@ class Matroska(core.AVContainer):
         self.video.append(track)
         return track
 
-
     def process_audio_track(self, elements):
         track = core.AudioStream()
         track.codec = 'Unknown'
@@ -625,7 +602,6 @@ class Matroska(core.AVContainer):
             else:
                 self.process_track_common(elem, track)
 
-
         if track.codec in FOURCCMap:
             track.codec = FOURCCMap[track.codec]
         elif '/' in track.codec and track.codec.split('/')[0] + '/' in FOURCCMap:
@@ -636,7 +612,6 @@ class Matroska(core.AVContainer):
         track.id = len(self.audio)
         self.audio.append(track)
         return track
-
 
     def process_chapters(self, chapters):
         elements = self.process_one_level(chapters)
@@ -649,7 +624,6 @@ class Matroska(core.AVContainer):
                     if sub_elem.get_id() == MATROSKA_CHAPTER_ATOM_ID:
                         self.process_chapter_atom(sub_elem)
                     index += sub_elem.get_total_len() + sub_elem.get_crc_len()
-
 
     def process_chapter_atom(self, atom):
         elements = self.process_one_level(atom)
@@ -676,7 +650,6 @@ class Matroska(core.AVContainer):
         chap.id = len(self.chapters)
         self.chapters.append(chap)
 
-
     def process_attachments(self, attachments):
         buf = attachments.get_data()
         index = 0
@@ -685,7 +658,6 @@ class Matroska(core.AVContainer):
             if elem.get_id() == MATROSKA_ATTACHED_FILE_ID:
                 self.process_attachment(elem)
             index += elem.get_total_len() + elem.get_crc_len()
-
 
     def process_attachment(self, attachment):
         elements = self.process_one_level(attachment)
@@ -709,7 +681,6 @@ class Matroska(core.AVContainer):
             self.thumbnail = data
 
         log.debug('Attachment %r found' % name)
-
 
     def process_tags(self, tags):
         # Tags spec: http://www.matroska.org/technical/specs/tagging/index.html
@@ -749,7 +720,6 @@ class Matroska(core.AVContainer):
             else:
                 self.tags.update(tags_dict)
                 self.tags_to_attributes(self, tags_dict)
-
 
     def process_simple_tag(self, simple_tag_elem, tags_dict):
         """
@@ -794,7 +764,6 @@ class Matroska(core.AVContainer):
         else:
             tags_dict[name] = value
 
-
     def tags_to_attributes(self, obj, tags):
         # Convert tags to core attributes.
         for name, tag in tags.items():
@@ -816,7 +785,7 @@ class Matroska(core.AVContainer):
             if filter:
                 try:
                     value = [filter(item) for item in value] if isinstance(value, list) else filter(value)
-                except Exception, e:
+                except Exception as e:
                     log.warning('Failed to convert tag to core attribute: %r', e)
             # Special handling for tv series recordings. The 'title' tag
             # can be used for both the series and the episode name. The

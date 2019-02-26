@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import os
 import re
@@ -576,7 +576,7 @@ class ParseResult(object):
             self.version == other.version
         ])
 
-    def __unicode__(self):
+    def __str__(self):
         to_return = ""
         if self.series_name is not None:
             to_return += 'SHOW:[{}]'.format(self.series_name)
@@ -598,9 +598,6 @@ class ParseResult(object):
         to_return += ' REGEX:[{}]'.format(' '.join(self.which_regex))
 
         return to_return
-
-    def __str__(self):
-        return self.__unicode__().encode('utf-8', errors='replace')
 
     @property
     def is_air_by_date(self):

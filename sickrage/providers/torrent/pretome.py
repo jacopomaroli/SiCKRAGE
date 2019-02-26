@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import re
 import urllib
@@ -135,7 +135,7 @@ class PretomeProvider(TorrentProvider):
                 torrent_id = link['href'].replace('details.php?id=', '')
 
                 try:
-                    if link.has_key('title'):
+                    if 'title' in link:
                         title = link['title']
                     else:
                         title = link.contents[0]

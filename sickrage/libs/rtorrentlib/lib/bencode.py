@@ -233,7 +233,7 @@ def _encode_list(data):
     elist = b'l'
     for item in data:
         eitem = encode(item)
-        if eitem == False:
+        if not eitem:
             return False
         elist += eitem
     return elist + b'e'

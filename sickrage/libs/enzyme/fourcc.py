@@ -16,8 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
-from __future__ import unicode_literals
+
+
 
 import re
 import string
@@ -49,13 +49,13 @@ def resolve(code):
             return hex(code), TWOCC.get(code, codec)
         elif len(code) != 4 and len([x for x in code if x not in string.printable]) == 0:
             # Code is a printable string.
-            codec = unicode(code)
+            codec = str(code)
 
         if code[:2] == 'MS' and code[2:].upper() in FOURCC:
             code = code[2:]
 
         if code.upper() in FOURCC:
-            return code.upper(), unicode(FOURCC[code.upper()])
+            return code.upper(), str(FOURCC[code.upper()])
         return None, codec
     elif isinstance(code, (int, long)):
         return hex(code), TWOCC.get(code, 'Unknown')

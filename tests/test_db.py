@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with SickRage.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function, unicode_literals
 
 import datetime
 import unittest
@@ -32,7 +31,7 @@ from sickrage.core.tv.episode import TVEpisode
 class DBBasicTests(tests.SiCKRAGETestDBCase):
     def setUp(self):
         super(DBBasicTests, self).setUp()
-        show = TVShow(1, 0001, "en")
+        show = TVShow(1, 0o0001, "en")
         show.save_to_db()
         sickrage.app.showlist += [show]
 
@@ -73,6 +72,7 @@ class DBBasicTests(tests.SiCKRAGETestDBCase):
                 ep.save_to_db()
 
         self.assertEqual(count, 3)
+
 
 if __name__ == '__main__':
     print("==================")
